@@ -39,8 +39,8 @@ jobs:
       run: ./tflint
 
     - name: Terraform Plan
-      run: ./terraform plan
+      run: ./terraform plan -var "github_token=${{ secrets.PERSONAL_ACCESS_TOKEN }}"
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -var "github_token=${{ secrets.PERSONAL_ACCESS_TOKEN }}"
