@@ -22,9 +22,27 @@ resource "aws_codepipeline" "pipeline" {
         Owner = var.github_owner
         Repo  = var.github_repo
         # TODO: env?
-        Branch               = "buildspec"
+        Branch               = "master"
         OAuthToken           = aws_ssm_parameter.github_personal_access_token.value
         PollForSourceChanges = "false"
+      }
+    }
+  }
+
+  stage {
+    name = "Build-And-Deploy-Staging"
+
+    action {
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["build_output_staging"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = module.codebuild_staging.codebuild_project_name
       }
     }
   }
@@ -33,25 +51,29 @@ resource "aws_codepipeline" "pipeline" {
     name = "Build"
 
     action {
-      name             = "Build"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      output_artifacts = ["build_output"]
-      version          = "1"
-
-      configuration = {
-        ProjectName = aws_codebuild_project.project.name
-      }
-    }
-
-    action {
       name     = "Approval"
       category = "Approval"
       owner    = "AWS"
       provider = "Manual"
       version  = "1"
+    }
+  }
+
+  stage {
+    name = "Build-And-Deploy-Production"
+
+    action {
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["build_output_production"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = module.codebuild_production.codebuild_project_name
+      }
     }
   }
 }
