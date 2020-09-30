@@ -18,6 +18,6 @@ resource "aws_codebuild_project" "project" {
   source {
     type = "CODEPIPELINE"
     # TODO: env
-    buildspec = "buildspec.yml"
+    buildspec = "buildspec-staging.yml"
   }
 }
