@@ -2,5 +2,5 @@ provider "aws" {
 }
 
 provider "github" {
-  token = "hogehoge"
+  token = var.github_token
 }
