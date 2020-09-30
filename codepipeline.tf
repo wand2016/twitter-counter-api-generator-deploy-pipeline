@@ -22,7 +22,7 @@ resource "aws_codepipeline" "pipeline" {
         Owner = var.github_owner
         Repo  = var.github_repo
         # TODO: env?
-        Branch               = "master"
+        Branch               = "buildspec"
         OAuthToken           = aws_ssm_parameter.github_personal_access_token.value
         PollForSourceChanges = "false"
       }
