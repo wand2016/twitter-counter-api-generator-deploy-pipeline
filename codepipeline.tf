@@ -30,7 +30,7 @@ resource "aws_codepipeline" "pipeline" {
   }
 
   stage {
-    name = "Build"
+    name = "Build-And-Deploy-Staging"
 
     action {
       name             = "Build"
@@ -38,13 +38,17 @@ resource "aws_codepipeline" "pipeline" {
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source_output"]
-      output_artifacts = ["build_output"]
+      output_artifacts = ["build_output_staging"]
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.project.name
+        ProjectName = module.codebuild_staging.codebuild_project_name
       }
     }
+  }
+
+  stage {
+    name = "Build"
 
     action {
       name     = "Approval"
@@ -52,6 +56,24 @@ resource "aws_codepipeline" "pipeline" {
       owner    = "AWS"
       provider = "Manual"
       version  = "1"
+    }
+  }
+
+  stage {
+    name = "Build-And-Deploy-Production"
+
+    action {
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["build_output_production"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = module.codebuild_production.codebuild_project_name
+      }
     }
   }
 }
