@@ -45,6 +45,14 @@ resource "aws_codepipeline" "pipeline" {
         ProjectName = aws_codebuild_project.project.name
       }
     }
+
+    action {
+      name     = "Approval"
+      category = "Approval"
+      owner    = "AWS"
+      provider = "Manual"
+      version  = "1"
+    }
   }
 }
 
