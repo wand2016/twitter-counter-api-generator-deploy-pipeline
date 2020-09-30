@@ -8,6 +8,7 @@ services:
       - "AWS_SECRET_ACCESS_KEY"
       - "AWS_SESSION_TOKEN"
       - "AWS_DEFAULT_REGION"
+      - "TF_VAR_github_token=${PERSONAL_ACCESS_TOKEN}"
     volumes:
       - "./:/work/"
 

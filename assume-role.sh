@@ -1,6 +1,5 @@
 #!/bin/bash
 
-unset AWS_SESSION_TOKEN
 export AWS_REGION=ap-northeast-1
 
 temp_role=$(aws sts assume-role \
