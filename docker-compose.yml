@@ -10,3 +10,14 @@ services:
       - "AWS_DEFAULT_REGION"
     volumes:
       - "./:/work/"
+
+  tflint:
+    image: "wata727/tflint"
+    working_dir: "/work"
+    environment:
+      - "AWS_ACCESS_KEY_ID"
+      - "AWS_SECRET_ACCESS_KEY"
+      - "AWS_SESSION_TOKEN"
+      - "AWS_DEFAULT_REGION"
+    volumes:
+      - "./:/work/"
