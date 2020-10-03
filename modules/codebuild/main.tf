@@ -1,7 +1,11 @@
 variable "stage" {
+  default = "dev"
   description = "staging or production"
 }
-
+variable "bucket_name" {
+  default = "dev-twitter-counter-api"
+  description = "staging or production"
+}
 variable "service_role_arn" {
 }
 
@@ -20,11 +24,22 @@ resource "aws_codebuild_project" "default" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
+
+    environment_variable {
+      name = "STAGE"
+      value = var.stage
+    }
+
+    environment_variable {
+      name = "AWS_BUCKET"
+      value = var.bucket_name
+    }
+
   }
 
   source {
     type = "CODEPIPELINE"
-    buildspec = "buildspec-${var.stage}.yml"
+    buildspec = "buildspec.yml"
   }
 }
 
