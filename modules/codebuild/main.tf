@@ -6,6 +6,8 @@ variable "bucket_name" {
   default = "dev-twitter-counter-api"
   description = "staging or production"
 }
+variable "cache_bucket_name" {
+}
 variable "service_role_arn" {
 }
 
@@ -16,6 +18,11 @@ resource "aws_codebuild_project" "default" {
 
   artifacts {
     type = "CODEPIPELINE"
+  }
+
+  cache {
+    type     = "S3"
+    location = var.cache_bucket_name
   }
 
   environment {
